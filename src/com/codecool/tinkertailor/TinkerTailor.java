@@ -1,13 +1,10 @@
 package com.codecool.tinkertailor;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Scanner;
+import java.util.*;
 
 public class TinkerTailor {
 
-    public static List<Integer> playGame(int playerNumber, int syllableSequenceLength) {
+    public static List<Integer> playGameLinkedList(int playerNumber, int syllableSequenceLength) {
         List<Integer> players = new LinkedList<>();
 
         for (int i = 0; i < playerNumber; i++) {
@@ -36,14 +33,36 @@ public class TinkerTailor {
         return outcome;
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the number of players are in: ");
-        int playerNumber = scanner.nextInt();
-        System.out.println("Enter the length of the syllable sequence: ");
-        int syllableSequenceLength = scanner.nextInt();
+    public static List<Integer> playGameArrayList(int playerNumber, int syllableSequenceLength) {
+        List<Integer> players = new ArrayList<>(playerNumber);
 
-        System.out.println(playGame(playerNumber, syllableSequenceLength));
+        for (int i = 0; i < playerNumber; i++) {
+            players.add(i + 1);
+        }
+
+        List<Integer> outcome = new ArrayList<>(playerNumber);
+        int indexToCopyFrom = -1;
+
+        while (outcome.size() != playerNumber) {
+            indexToCopyFrom += syllableSequenceLength;
+            while (players.get(indexToCopyFrom % playerNumber) == 0) {
+                indexToCopyFrom++;
+            }
+            outcome.add(players.get(indexToCopyFrom % playerNumber));
+            players.set(indexToCopyFrom % playerNumber, 0);
+        }
+
+        return outcome;
+    }
+
+    public static void main(String[] args) {
+        long startTime = System.currentTimeMillis();
+        System.out.println(playGameLinkedList(20, 3));
+        System.out.println("With LinkedList it took: " + (System.currentTimeMillis() - startTime) + "ms");
+
+        startTime = System.currentTimeMillis();
+        System.out.println(playGameArrayList(20, 3));
+        System.out.println("With ArrayList it took: " + (System.currentTimeMillis() - startTime) + "ms");
     }
 
 }
